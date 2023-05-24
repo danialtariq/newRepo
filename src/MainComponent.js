@@ -3,27 +3,33 @@ import axios from 'axios';
 import './Main.css'
 
 const MainComponent = () => {
-  const [newsArticles, setNewsArticles] = useState([]);
+  const [newsArticles, setNewsArticles] = useState([]);//
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
+  useEffect(() => {//
     const fetchNewsArticles = async () => {
-      try {
-        const response = await axios.get(
-          
-'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=f00ae70cdf714eeda4c02bd875df598d'
+      try {//
+        const response = await axios.get(//
+
+          'https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=f00ae70cdf714eeda4c02bd875df598d'
         );
         console.log(response.data.articles)
+        localStorage.setItem('articles',response.data.articles)
         setNewsArticles(response.data.articles);
         setLoading(false);
-      } catch (error) {
+      } catch (error) {//
         setError('Failed to fetch news articles.');
         setLoading(false);
       }
     };
-
+    let items=localStorage.getItem('articles');
+    if(items==null || items==''){
     fetchNewsArticles();
+    }
+    else{
+      setNewsArticles(items);
+    }
   }, []);
 
   if (loading) {
